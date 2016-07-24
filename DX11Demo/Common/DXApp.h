@@ -16,6 +16,9 @@ public:
 
 	virtual void Update(float dt) = 0;
 	virtual void Render(float dt) = 0;
+	void CalculateFrameStats();
+
+	float AspectRatio() const;
 
 	// Convenience overrides for handling mouse input.
 	virtual void OnMouseDown(WPARAM btnState, int x, int y) { }

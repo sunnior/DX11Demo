@@ -42,6 +42,12 @@
     <ClCompile Include="winmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Common\ViewDXApp.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\MathHelper.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\DXApp.h">
@@ -62,10 +68,13 @@
     <ClInclude Include="Demos\DXAppSingleColor.h">
       <Filter>Demos</Filter>
     </ClInclude>
-    <ClInclude Include="Common\MathHelper.h">
+    <ClInclude Include="..\..\..\..\books\dx11 source code\Common\d3dx11effect.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\books\dx11 source code\Common\d3dx11effect.h">
+    <ClInclude Include="Common\ViewDXApp.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\MathHelper.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

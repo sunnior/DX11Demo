@@ -9,17 +9,17 @@ struct Vertex {
 };
 
 DXAppBox::DXAppBox(HINSTANCE hInstance) 
-	: DXApp(hInstance, "Demo Box")
+	: ViewDXApp(hInstance, "Demo Box")
 {
-	XMMATRIX I = XMMatrixIdentity();
-	XMStoreFloat4x4(&m_World, I);
-	XMStoreFloat4x4(&m_View, I);
-	XMStoreFloat4x4(&m_Proj, I);
 }
 
 
 DXAppBox::~DXAppBox()
 {
+	SafeRelease(m_pEffect);
+	SafeRelease(m_pInputLayout);
+	SafeRelease(m_iBuffer);
+	SafeRelease(m_vBuffer);
 }
 
 bool DXAppBox::Init()
@@ -40,13 +40,13 @@ void DXAppBox::BuildGeometryBuffers()
 	Vertex vertices[] =
 	{
 		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4((const float*)&Colors::White) },
-		{ XMFLOAT3(-1.0f, +1.0f, -1.0f), XMFLOAT4((const float*)&Colors::Black) },
+		{ XMFLOAT3(-1.0f, +1.0f, -1.0f), XMFLOAT4((const float*)&Colors::Magenta) },
 		{ XMFLOAT3(+1.0f, +1.0f, -1.0f), XMFLOAT4((const float*)&Colors::Red) },
-		{ XMFLOAT3(+1.0f, -1.0f, -1.0f), XMFLOAT4((const float*)&Colors::Green) },
-		{ XMFLOAT3(-1.0f, -1.0f, +1.0f), XMFLOAT4((const float*)&Colors::Blue) },
-		{ XMFLOAT3(-1.0f, +1.0f, +1.0f), XMFLOAT4((const float*)&Colors::Yellow) },
-		{ XMFLOAT3(+1.0f, +1.0f, +1.0f), XMFLOAT4((const float*)&Colors::Cyan) },
-		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), XMFLOAT4((const float*)&Colors::Magenta) }
+		{ XMFLOAT3(+1.0f, -1.0f, -1.0f), XMFLOAT4((const float*)&Colors::Yellow) },
+		{ XMFLOAT3(-1.0f, -1.0f, +1.0f), XMFLOAT4((const float*)&Colors::Cyan) },
+		{ XMFLOAT3(-1.0f, +1.0f, +1.0f), XMFLOAT4((const float*)&Colors::Blue) },
+		{ XMFLOAT3(+1.0f, +1.0f, +1.0f), XMFLOAT4((const float*)&Colors::Black) },
+		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), XMFLOAT4((const float*)&Colors::Green) }
 	};
 
 	D3D11_BUFFER_DESC vbDesc;
@@ -126,6 +126,8 @@ void DXAppBox::BuildFX()
 
 	m_pTech = m_pEffect->GetTechniqueByName("ColorTech");
 	m_pMatrixVariable = m_pEffect->GetVariableByName("gWorldViewProj")->AsMatrix();
+	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	XMStoreFloat4x4(&m_Proj, P);
 }
 
 void DXAppBox::BuildVertexLayout()
@@ -142,15 +144,15 @@ void DXAppBox::BuildVertexLayout()
 
 }
 
-void DXAppBox::Update(float)
+void DXAppBox::Update(float dt)
 {
-	// Build the view matrix.
-	XMVECTOR pos = XMVectorSet(0, 3.5, -3.5, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	ViewDXApp::Update(dt);
+	XMMATRIX world = XMLoadFloat4x4(&m_World);
+	XMMATRIX view = XMLoadFloat4x4(&m_View);
+	XMMATRIX proj = XMLoadFloat4x4(&m_Proj);
+	XMMATRIX worldViewProj = world*view*proj;
 
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
-	XMStoreFloat4x4(&m_View, V);
+	m_pMatrixVariable->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
 }
 
 void DXAppBox::Render(float)
@@ -165,14 +167,6 @@ void DXAppBox::Render(float)
 	UINT offset = 0;
 	m_pImmediateContext->IASetVertexBuffers(0, 1, &m_vBuffer, &stride, &offset);
 	m_pImmediateContext->IASetIndexBuffer(m_iBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-
-	XMMATRIX world = XMLoadFloat4x4(&m_World);
-	XMMATRIX view = XMLoadFloat4x4(&m_View);
-	XMMATRIX proj = XMLoadFloat4x4(&m_Proj);
-	XMMATRIX worldViewProj = world*view*proj;
-
-	m_pMatrixVariable->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
 
 	D3DX11_TECHNIQUE_DESC techDesc;
 	m_pTech->GetDesc(&techDesc);

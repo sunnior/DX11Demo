@@ -22,6 +22,8 @@
     <ClCompile Include="Common\DXApp.cpp" />
     <ClCompile Include="Common\dxerr.cpp" />
     <ClCompile Include="Common\GameTimer.cpp" />
+    <ClCompile Include="Common\MathHelper.cpp" />
+    <ClCompile Include="Common\ViewDXApp.cpp" />
     <ClCompile Include="Demos\DXAppBox.cpp" />
     <ClCompile Include="Demos\DXAppSingleColor.cpp" />
     <ClCompile Include="winmain.cpp" />
@@ -33,6 +35,7 @@
     <ClInclude Include="Common\dxerr.h" />
     <ClInclude Include="Common\GameTimer.h" />
     <ClInclude Include="Common\MathHelper.h" />
+    <ClInclude Include="Common\ViewDXApp.h" />
     <ClInclude Include="Demos\DXAppBox.h" />
     <ClInclude Include="Demos\DXAppSingleColor.h" />
   </ItemGroup>

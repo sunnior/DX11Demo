@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <windowsx.h>
 #include "DXAppUtil.h"
+#include <sstream>
 
 namespace
 {
@@ -94,21 +95,15 @@ bool DXApp::InitDX11()
 #ifdef _DEBUG
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-	D3D_FEATURE_LEVEL featureLevels[] = {
-		D3D_FEATURE_LEVEL_11_1,
-		D3D_FEATURE_LEVEL_10_1,
-		D3D_FEATURE_LEVEL_10_0,
-		D3D_FEATURE_LEVEL_9_3
-	};
 	//CREATE DEVICE
 	HRESULT hr = D3D11CreateDevice(nullptr, m_DriverType, NULL, createDeviceFlags,
-		featureLevels, 4, D3D11_SDK_VERSION, &m_pDevice, &m_FeatureLevel, &m_pImmediateContext);
+		nullptr, 0, D3D11_SDK_VERSION, &m_pDevice, &m_FeatureLevel, &m_pImmediateContext);
 	if (FAILED(hr)) {
 		OutputDebugString("FAIL TO CREATE D3D11 DEVICE\n");
 		return false;
 	}
 
-	if (m_FeatureLevel != D3D_FEATURE_LEVEL_11_1) {
+	if (m_FeatureLevel != D3D_FEATURE_LEVEL_11_0) {
 		OutputDebugString("FEATURE LEVEL IS NOT 11\n");
 		return false;
 	}
@@ -172,7 +167,7 @@ bool DXApp::InitDX11()
 	m_pDevice->CreateDepthStencilView(pDepthStencilBuffer, 0, &m_pDepthStencilView);
 
 	m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
-	//pDepthStencilBuffer->Release();
+	pDepthStencilBuffer->Release();
 
 	D3D11_VIEWPORT vp;
 	vp.TopLeftX = 0;
@@ -190,6 +185,8 @@ bool DXApp::InitDX11()
 int DXApp::Run()
 {
 	MSG msg = { 0 };
+
+	m_GameTimer.Reset();
 	while (WM_QUIT != msg.message) {
 		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)) {
 			TranslateMessage(&msg);
@@ -198,6 +195,7 @@ int DXApp::Run()
 		else {
 			m_GameTimer.Tick();
 			float dt = m_GameTimer.DeltaTime();
+			CalculateFrameStats();
 			Update(dt);
 			Render(dt);
 		}
@@ -230,6 +228,41 @@ LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
+float DXApp::AspectRatio() const
+{
+	return static_cast<float>(m_ClientWidth) / m_ClientHeight;
+}
+
+void DXApp::CalculateFrameStats()
+{
+	// Code computes the average frames per second, and also the 
+	// average time it takes to render one frame.  These stats 
+	// are appended to the window caption bar.
+
+	static int frameCnt = 0;
+	static float timeElapsed = 0.0f;
+
+	frameCnt++;
+
+	// Compute averages over one second period.
+	if ((m_GameTimer.GameTime() - timeElapsed) >= 1.0f)
+	{
+		float fps = (float)frameCnt; // fps = frameCnt / 1
+		float mspf = 1000.0f / fps;
+
+		std::stringstream outs;
+		outs.precision(6);
+		outs << m_AppTitle.c_str() << "    "
+			<< "FPS: " << fps << "    "
+			<< "Frame Time: " << mspf << " (ms)";
+		SetWindowText(m_hAppWnd, outs.str().c_str());
+
+		// Reset for next average.
+		frameCnt = 0;
+		timeElapsed += 1.0f;
+	}
+}
+
 DXApp::~DXApp()
 {
 	if (m_pImmediateContext) {
@@ -237,5 +270,9 @@ DXApp::~DXApp()
 	}
 	SafeRelease(m_pDevice);
 	SafeRelease(m_pImmediateContext);
+
+	SafeRelease(m_pSwapChain);
+	SafeRelease(m_pRenderTargetView);
+	SafeRelease(m_pDepthStencilView);
 }
 

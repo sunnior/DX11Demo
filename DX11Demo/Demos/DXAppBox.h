@@ -1,8 +1,8 @@
 #pragma once
-#include "ViewDXApp.h"
+#include "DXAppView.h"
 #include "d3dx11effect.h"
 
-class DXAppBox : public ViewDXApp
+class DXAppBox : public DXAppView
 {
 public:
 	DXAppBox(HINSTANCE);

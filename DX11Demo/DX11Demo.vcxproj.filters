@@ -42,10 +42,16 @@
     <ClCompile Include="winmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Common\ViewDXApp.cpp">
+    <ClCompile Include="Common\MathHelper.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Common\MathHelper.cpp">
+    <ClCompile Include="Demos\DXAppHills.cpp">
+      <Filter>Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\DXAppView.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\GeometryGenerator.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,10 +77,16 @@
     <ClInclude Include="..\..\..\..\books\dx11 source code\Common\d3dx11effect.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Common\ViewDXApp.h">
+    <ClInclude Include="Common\MathHelper.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Common\MathHelper.h">
+    <ClInclude Include="Demos\DXAppHills.h">
+      <Filter>Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\DXAppView.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\GeometryGenerator.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

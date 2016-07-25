@@ -9,7 +9,7 @@ struct Vertex {
 };
 
 DXAppBox::DXAppBox(HINSTANCE hInstance) 
-	: ViewDXApp(hInstance, "Demo Box")
+	: DXAppView(hInstance, "Demo Box")
 {
 }
 
@@ -146,7 +146,7 @@ void DXAppBox::BuildVertexLayout()
 
 void DXAppBox::Update(float dt)
 {
-	ViewDXApp::Update(dt);
+	DXAppView::Update(dt);
 	XMMATRIX world = XMLoadFloat4x4(&m_World);
 	XMMATRIX view = XMLoadFloat4x4(&m_View);
 	XMMATRIX proj = XMLoadFloat4x4(&m_Proj);

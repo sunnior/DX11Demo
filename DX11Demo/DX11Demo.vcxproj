@@ -27,6 +27,7 @@
     <ClCompile Include="Common\DXAppView.cpp" />
     <ClCompile Include="Demos\DXAppBox.cpp" />
     <ClCompile Include="Demos\DXAppHills.cpp" />
+    <ClCompile Include="Demos\DXAppShapes.cpp" />
     <ClCompile Include="Demos\DXAppSingleColor.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
@@ -41,6 +42,7 @@
     <ClInclude Include="Common\DXAppView.h" />
     <ClInclude Include="Demos\DXAppBox.h" />
     <ClInclude Include="Demos\DXAppHills.h" />
+    <ClInclude Include="Demos\DXAppShapes.h" />
     <ClInclude Include="Demos\DXAppSingleColor.h" />
   </ItemGroup>
   <ItemGroup>

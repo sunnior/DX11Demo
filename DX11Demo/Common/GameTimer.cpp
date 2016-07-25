@@ -69,10 +69,10 @@ void GameTimer::Tick()
 
 float GameTimer::GameTime() const
 {
-	return (m_CurCount-m_BaseCount-m_PausedCount)*m_SecondsPerCount;
+	return static_cast<float>((m_CurCount-m_BaseCount-m_PausedCount)*m_SecondsPerCount);
 }
 
 float GameTimer::DeltaTime() const
 {
-	return m_DeltaTime;
+	return static_cast<float>(m_DeltaTime);
 }

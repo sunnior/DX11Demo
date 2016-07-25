@@ -6,6 +6,12 @@
 
 DXAppHills::DXAppHills(HINSTANCE hInstance)
 	: DXAppView(hInstance, "DXApp Demo Hills")
+	, m_pEffect(nullptr)
+	, m_pTech(nullptr)
+	, m_pInputLayout(nullptr)
+	, m_pMatrixVariable(nullptr)
+	, m_iBuffer(nullptr)
+	, m_vBuffer(nullptr)
 {
 	m_Radius = 200.0f;
 	m_LowRadius = 100.0f;
